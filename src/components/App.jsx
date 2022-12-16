@@ -9,8 +9,8 @@ import Result from './Result';
 
 export function App() {
 	const [results, setResults] = useState([]);
-	const [imgDetails, setImgDetails] = useState('');
-
+	const [imgDetails, setImgDetails] = useState({});
+	const [imageShowDetails, setImageShowDetails] = useState(false);
 	function onSearchSubmit(query) {
 		// Search for the users's query.
 		// TODO: render the results, instead of logging them to the console.
@@ -27,6 +27,7 @@ export function App() {
 	const handleShowDetails = ({ image, altText }) => {
 		console.log('details');
 		//need to show img details
+		setImageShowDetails(true);
 		setImgDetails({
 			image,
 			altText,
@@ -34,14 +35,16 @@ export function App() {
 	};
 	const handleGoBack = () => {
 		console.log('go back');
+		setImageShowDetails(false);
 	};
 	return (
 		<div className="App">
 			<h1>TCL Career Lab Art Finder</h1>
-			<SearchForm onSearchSubmit={onSearchSubmit} />
+
 			{/* if search yields result then show image artist ,title and link for more details*/}
-			{results.length ? (
+			{!imageShowDetails ? (
 				<>
+					<SearchForm onSearchSubmit={onSearchSubmit} />
 					<ul>
 						{results.map((result) => {
 							return (
@@ -56,13 +59,14 @@ export function App() {
 							);
 						})}
 					</ul>
-					<ImageDetailsPage
-						altText={imgDetails.altText}
-						goBack={handleGoBack}
-						imageId={imgDetails.image}
-					/>
 				</>
-			) : null}
+			) : (
+				<ImageDetailsPage
+					altText={imgDetails.thumbnail.alt_text}
+					goBack={handleGoBack}
+					imageId={imgDetails.image_id}
+				/>
+			)}
 
 			<Footer />
 		</div>
