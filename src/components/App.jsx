@@ -5,6 +5,7 @@ import { SearchForm } from './SearchForm';
 import { Footer } from './Footer';
 import ImageDetailsPage from './ImageDetailsPage';
 import { useState } from 'react';
+import Result from './Result';
 
 export function App() {
 	const [results, setResults] = useState([]);
@@ -19,30 +20,41 @@ export function App() {
 
 		searchArtworks(query).then((json) => {
 			console.log(json);
-			setResults(json);
+			setResults(json.data);
 		});
 	}
-
+	const handleShowDetails = ({ image, altText }) => {
+		console.log('details');
+	};
+	const handleGoBack = () => {
+		console.log('go back');
+	};
 	return (
 		<div className="App">
 			<h1>TCL Career Lab Art Finder</h1>
 			<SearchForm onSearchSubmit={onSearchSubmit} />
-			{/* if search yelds result then show image artist ,title and link for more details*/}
-			{results.length ? (
-				<>
-					<p>Results</p>
-					<ul>
-						{results.map(({ image_id, title, artist_title }) => {
-							return;
-							<li key={image_id}>
-								<p>Title{title}</p>
-								<p>Artist{artist_title}</p>
-								<a href="#">Details</a>
-							</li>;
-						})}
-					</ul>
-				</>
-			) : null}
+			{/* if search yields result then show image artist ,title and link for more details*/}
+
+			<ul>
+				{results.map((result) => {
+					return (
+						<Result
+							key={result.id}
+							altText={result.thumbnail.alt_text}
+							image={result.image_id}
+							name={result.artist_title}
+							title={result.title}
+							onDetails={handleShowDetails}
+						/>
+					);
+				})}
+			</ul>
+			<ImageDetailsPage
+				altText={results.altText}
+				goBack={handleGoBack}
+				imageId={results.image}
+			/>
+
 			<Footer />
 		</div>
 	);
