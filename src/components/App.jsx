@@ -9,7 +9,7 @@ import Result from './Result';
 
 export function App() {
 	const [results, setResults] = useState([]);
-	const [imgDetails, setImgDetails] = useState({});
+	const [imgDetails, setImgDetails] = useState();
 	const [imageShowDetails, setImageShowDetails] = useState(false);
 	function onSearchSubmit(query) {
 		// Search for the users's query.
@@ -26,6 +26,7 @@ export function App() {
 	}
 	const handleShowDetails = ({ image, altText }) => {
 		console.log('details');
+		console.log(imgDetails);
 		//need to show img details
 		setImageShowDetails(true);
 		setImgDetails({
@@ -62,9 +63,9 @@ export function App() {
 				</>
 			) : (
 				<ImageDetailsPage
-					altText={imgDetails.thumbnail.alt_text}
+					altText={imgDetails.altText}
 					goBack={handleGoBack}
-					imageId={imgDetails.image_id}
+					imageId={imgDetails.image}
 				/>
 			)}
 
